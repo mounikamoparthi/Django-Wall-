@@ -1,0 +1,45 @@
+<html>
+    <head>
+       <title>Wall Page</title>
+    
+    </head>
+    <body>
+        <h1> Welcome {{name}} </h1>
+        {{id}}
+
+        <form action="{% url 'my_wall' %}" method ="post">
+                {% csrf_token %}
+            <p>
+            <label for="">Title</label>
+            <input type="text"  name="title">
+            </p><p>
+            <textarea name = "messages" rows = "5" cols = "80"></textarea>
+            </p><p>
+            <input type="hidden" name="action" value="postmsg">
+            <input type="submit" name = "postmsg" value = 'Post the message'>
+            </p>
+        </form>
+        <table>
+        {% for blogs in blog %}
+        <td>
+        <tr><br> <br>{{blogs.user1.first_name}}, {{blogs.created_at}} <br> {{blogs.message}} <br> <br> </tr>
+        <form action = "{% url 'my_wall' %}" method="post">
+                {% csrf_token %}
+            
+                <input type = "hidden" name = 'msgid' value = {{blogs.id}}>
+                <textarea rows="5" cols="80"  name="commenting">
+                </textarea> <br> <br>
+                <input type="hidden" name="action" value="postcmt">
+                <tr> <input type = "submit"  name = 'postcmt' value = 'Post the comment'> </tr>
+            </p>
+            {% for comments in usercomments %}
+                {% if comments.message.id == blogs.id %}
+                <tr> {{comments.user.first_name}}, {{comments.created_at}}<br> {{comments.comment}}<br> </tr>
+                {%endif%}
+                {% endfor %}
+        </form>
+        </td>
+        {% endfor%}
+        </table>
+    </body>
+</html>
